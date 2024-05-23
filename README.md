@@ -6,19 +6,30 @@ Complete Configuration of JWT
 https://asecuritysite.com/encryption/plain
 
 
-# Overview of JWT Authentication Flow
+# JWT Authentication Flow
 ### 1. Client Requests Access:
-    The client sends a login request to the server with user credentials.
+    The client sends a login request to the server with user credentials (e.g., username and password).
+    
 ### 2. Server Validates Credentials:
-    The server verifies the credentials and generates a JWT if valid.
+    The server verifies the credentials against its user database.
+    If the credentials are valid, the server generates a JWT containing user information and possibly other claims (like roles or permissions).
+    
 ### 3. Client Receives and Stores JWT:
-    The client receives the JWT and stores it (usually in local storage or a cookie).
+    The client receives the JWT in the server's response.
+    The client stores the JWT, typically in local storage or a cookie, ensuring it can be included in future requests.
+
 ### 4. Client Makes Authenticated Requests:
-    The client includes the JWT in the Authorization header for subsequent API requests.
+    For subsequent API requests, the client includes the JWT in the Authorization header of the HTTP request.
+    The header format is usually Authorization: Bearer <token>.
+
 ### 5. Server Verifies JWT:
-    The server checks the JWT's validity and extracts the user's information.
+    The server extracts the JWT from the Authorization header.
+    The server verifies the JWT's validity, which involves checking the signature, expiration time, and possibly other claims.
+    If the JWT is valid, the server extracts user information from it (e.g., username, roles).
+
 ### 6. Server Processes the Request:
-    If the JWT is valid, the server processes the request and sends back a response.
+    If the JWT is valid, the server processes the authenticated request.
+    The server sends back the appropriate response to the client.
 
 
 
