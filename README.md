@@ -5,6 +5,7 @@ Complete Configuration of JWT
 ### Secret key Generator website
 https://asecuritysite.com/encryption/plain
 
+<br><br>
 
 # JWT Authentication Flow
 ### 1. Client Requests Access:
@@ -31,7 +32,7 @@ https://asecuritysite.com/encryption/plain
     - If the JWT is valid, the server processes the authenticated request.
     - The server sends back the appropriate response to the client.
 
-
+<br><br>
 
 # JWT Structure
 
@@ -69,6 +70,8 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4
 
 - Compare Signatures: The newly created signature is compared to the signature in the token. If they match, the token is valid and has not been tampered with. If they don't match, the token is invalid.
 
+<br><be>
+
 ## In Simple Terms
 
 ### Generating a Token:
@@ -93,6 +96,7 @@ This string is the signature. It ensures the integrity and authenticity of the t
 - Authenticity: Verifies that the token was issued by a trusted source (using the secret key).
 ### By signing the token with a secret key and verifying it on receipt, we ensure that the token is both secure and reliable.
 
+<br><br>
 
 # CSRF Attack in JWT Authentication
 
@@ -108,7 +112,7 @@ This string is the signature. It ensures the integrity and authenticity of the t
 | Expiry         | Can be set to expire after a specific time | Typically expire after a period of inactivity|
 | Use Case       | Storing user preferences, small data       | Storing authentication info, user state      |
 
-<br><br><br><br>
+<br><br><br>
 
 ## 1. Traditional Auth (Cookie-Based)
 
@@ -151,6 +155,8 @@ This string is the signature. It ensures the integrity and authenticity of the t
 **Cons**:
 - Vulnerable to CSRF attacks.
 - Requires additional CSRF protection mechanisms.
+
+<br><br>
 
 ## 2. JWT Auth (Header-Based)
 
@@ -195,6 +201,8 @@ This string is the signature. It ensures the integrity and authenticity of the t
 **Cons**:
 - Vulnerable to XSS attacks if the token is not securely stored.
 - Client-side code must manage token storage and inclusion in requests.
+
+<br><br>
 
 ## 3. JWT in Session Cookies
 
