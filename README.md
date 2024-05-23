@@ -1,6 +1,9 @@
 # JWT-Authentication
 Complete Configuration of JWT
 
+- <span style="color: green;">Feature 1: Green text</span>
+- <span style="color: blue;">Feature 2: Blue text</span>
+- <span style="color: red;">Feature 3: Red text</span>
 
 ### Secret key Generator website
 https://asecuritysite.com/encryption/plain
