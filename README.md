@@ -95,8 +95,8 @@ This string is the signature. It ensures the integrity and authenticity of the t
 
 # CSRF Attack in JWT Authentication
 
-![image](https://github.com/siddhld/jwt-Authentication-Updated/assets/90497078/5156df32-2d2c-44ae-aac2-a9cd0820fee3)
 ![image](https://github.com/siddhld/jwt-Authentication-Updated/assets/90497078/86724999-a328-4acc-98f0-20dc5097f06b)
+![image](https://github.com/siddhld/jwt-Authentication-Updated/assets/90497078/5156df32-2d2c-44ae-aac2-a9cd0820fee3)
 
 
 ### By signing the token with a secret key and verifying it on receipt, we ensure that the token is both secure and reliable.
