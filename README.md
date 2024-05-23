@@ -246,27 +246,27 @@ This string is the signature. It ensures the integrity and authenticity of the t
 **Cons**:
 - Slightly more complex to implement compared to traditional auth.
 
-<br><br>
+<br><be>
 
 # Comparison and Best Choice
 
 - **Traditional Auth (Cookie-Based)**:
-  - **CSRF Risk**: High.
-  - **XSS Risk**: Medium (depends on HttpOnly attribute).
+  - **CSRF Risk**: <span style="color: red;">High</span>
+  - **XSS Risk**: <span style="color: blue;">Medium</span> (depends on HttpOnly attribute).
   - **Best for**: Simpler applications where CSRF protection is adequately managed.
 
 <br>
 
 - **JWT Auth (Header-Based)**:
-  - **CSRF Risk**: Low.
-  - **XSS Risk**: High (if stored in localStorage/sessionStorage).
+  - **CSRF Risk**: <span style="color: green;">Low</span>
+  - **XSS Risk**: <span style="color: red;">High</span> (if stored in localStorage/sessionStorage).
   - **Best for**: Stateless authentication, APIs where custom headers are easily managed.
 
 <br>
 
 - **JWT in Session Cookies**:
-  - **CSRF Risk**: Low (due to SameSite).
-  - **XSS Risk**: Low (due to HttpOnly).
+  - **CSRF Risk**: <span style="color: green;">Low</span> (due to SameSite).
+  - **XSS Risk**: <span style="color: green;">Low</span> (due to HttpOnly).
   - **Best for**: High-security applications where both XSS and CSRF mitigations are critical.
 
 <br>
