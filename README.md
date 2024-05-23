@@ -254,12 +254,16 @@ This string is the signature. It ensures the integrity and authenticity of the t
   - **CSRF Risk**: High.
   - **XSS Risk**: Medium (depends on HttpOnly attribute).
   - **Best for**: Simpler applications where CSRF protection is adequately managed.
+
 <br>
+
 - **JWT Auth (Header-Based)**:
   - **CSRF Risk**: Low.
   - **XSS Risk**: High (if stored in localStorage/sessionStorage).
   - **Best for**: Stateless authentication, APIs where custom headers are easily managed.
+
 <br>
+
 - **JWT in Session Cookies**:
   - **CSRF Risk**: Low (due to SameSite).
   - **XSS Risk**: Low (due to HttpOnly).
