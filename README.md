@@ -108,7 +108,7 @@ This string is the signature. It ensures the integrity and authenticity of the t
 | Expiry         | Can be set to expire after a specific time | Typically expire after a period of inactivity|
 | Use Case       | Storing user preferences, small data       | Storing authentication info, user state      |
 
-
+<br><br><br><br>
 
 ## 1. Traditional Auth (Cookie-Based)
 
