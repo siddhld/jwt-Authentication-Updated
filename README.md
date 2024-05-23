@@ -92,4 +92,10 @@ This string is the signature. It ensures the integrity and authenticity of the t
 - Integrity: Ensures the token's data hasn't been altered.
 - Authenticity: Verifies that the token was issued by a trusted source (using the secret key).
 
+
+# CSRF Attack in JWT Authentication
+
+![image](https://github.com/siddhld/jwt-Authentication-Updated/assets/90497078/5156df32-2d2c-44ae-aac2-a9cd0820fee3)
+
+
 ### By signing the token with a secret key and verifying it on receipt, we ensure that the token is both secure and reliable.
