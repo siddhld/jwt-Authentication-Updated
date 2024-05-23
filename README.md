@@ -246,6 +246,8 @@ This string is the signature. It ensures the integrity and authenticity of the t
 **Cons**:
 - Slightly more complex to implement compared to traditional auth.
 
+<br><br>
+
 # Comparison and Best Choice
 
 - **Traditional Auth (Cookie-Based)**:
@@ -262,6 +264,8 @@ This string is the signature. It ensures the integrity and authenticity of the t
   - **CSRF Risk**: Low (due to SameSite).
   - **XSS Risk**: Low (due to HttpOnly).
   - **Best for**: High-security applications where both XSS and CSRF mitigations are critical.
+
+<br>
 
 **Conclusion**:
 **JWT in Session Cookies** is generally the most secure option because it effectively mitigates both CSRF and XSS risks. By leveraging browser security features (HttpOnly, Secure, SameSite), it provides a robust solution for secure authentication. However, the choice may also depend on specific application requirements and the complexity you're willing to handle during implementation.
