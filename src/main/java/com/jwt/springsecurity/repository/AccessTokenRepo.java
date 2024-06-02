@@ -1,13 +1,12 @@
 package com.jwt.springsecurity.repository;
 
-import com.jwt.springsecurity.model.UserInfo;
+import com.jwt.springsecurity.model.AccessToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserInfoRepo extends JpaRepository<UserInfo, Integer> {
-    public Optional<UserInfo> findByUsername(String username);
-
+public interface AccessTokenRepo extends JpaRepository<AccessToken, Integer> {
+    public Optional<AccessToken> findByTokenKey(String tokenKey);
 }
