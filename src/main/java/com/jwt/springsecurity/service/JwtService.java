@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +27,13 @@ public class JwtService {
     private UserServiceInfoImpl userService;
     @Autowired
     private TokenBlacklistService tokenBlacklistService;
-    private static final String SECRET = "F16214C6D734BC929815DFC598EDCRE656HGFYRDTHRFCEe";
+
+    @Value("${jwt.secret.key}")
+    private String SECRET;
+    @Value("${jwt.access.token.expiry}")
+    private long jwtAccessTokenExpiry;
+    @Value("${jwt.refresh.token.expiry}")
+    private long jwtRefreshTokenExpiry;
 
     public String generateToken(UserInfo userInfo) {
         // Constructing Token
@@ -43,7 +50,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userInfo.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 1)) // 15 minutes
+                .setExpiration(new Date(System.currentTimeMillis() + jwtAccessTokenExpiry)) // 15 minutes
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -55,7 +62,7 @@ public class JwtService {
                 .setHeader(header)
                 .setSubject(userInfo.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 7 days
+                .setExpiration(new Date(System.currentTimeMillis() + jwtRefreshTokenExpiry)) // 7 days
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -112,9 +119,6 @@ public class JwtService {
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        System.err.println("^^^^^^^^^^^^ "+(username.equals(userDetails.getUsername()))+"^^^^^^");
-        System.err.println("^^^^^^^^^^^^ "+!isTokenExpired(token)+"^^^^^^");
-        System.err.println("^^^^^^^^^^^^ "+!tokenBlacklistService.isTokenBlacklisted(token)+"^^^^^^");
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !tokenBlacklistService.isTokenBlacklisted(token));
     }
 

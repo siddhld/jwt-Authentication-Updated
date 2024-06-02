@@ -44,9 +44,7 @@ public class JwtFiIter extends OncePerRequestFilter {
         if (token != null && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             if (tokenBlacklistService.isTokenBlacklisted(token)) {
-                System.err.println("@@@@@@@@@@@@ - "+token+" - @@@@@@@@@@ -- 1");
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is blacklisted (Expired)");
-                System.err.println("@@@@@@@@@@@@ - "+token+" - @@@@@@@@@@ -- 2");
                 return;
             }
 

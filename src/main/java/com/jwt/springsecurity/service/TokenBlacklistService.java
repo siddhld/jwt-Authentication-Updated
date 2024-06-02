@@ -2,8 +2,8 @@ package com.jwt.springsecurity.service;
 
 import com.jwt.springsecurity.model.AccessToken;
 import com.jwt.springsecurity.repository.AccessTokenRepo;
-import com.jwt.springsecurity.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +12,9 @@ public class TokenBlacklistService {
 
     @Autowired
     private RedisService redisService;
+
+    @Value("${jwt.access.token.expiry.second}")
+    private long jwtAccessTokenExpiryInSecond;
     @Autowired
     private AccessTokenRepo accessTokenRepo;
 
@@ -20,7 +23,7 @@ public class TokenBlacklistService {
         System.err.println("------******** Inside blacklistToken");
         try {
             accessTokenRepo.save(new AccessToken(token, token));
-            redisService.set("access-token-" + token, token, RedisUtils.redisExpAccessToken);
+            redisService.set("access-token-" + token, token, jwtAccessTokenExpiryInSecond);
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
@@ -38,7 +41,7 @@ public class TokenBlacklistService {
             }
             System.err.println("-----" + accessToken + "-------- 2");
             if (accessToken != null) {
-                redisService.set("access-token-" + token, token, RedisUtils.redisExpAccessToken);
+                redisService.set("access-token-" + token, token, jwtAccessTokenExpiryInSecond);
                 return true;
             }
             return false;
