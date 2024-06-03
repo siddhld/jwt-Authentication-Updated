@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -18,14 +19,20 @@ import java.util.stream.Collectors;
 public class AccessToken {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(unique = true)
     private String tokenKey;
     private String token;
+    @Column(name = "expiration_time", nullable = false)
+    private Timestamp expirationTime;
 
-    public AccessToken(String tokenKey, String token) {
+    public AccessToken(){}
+
+    public AccessToken(String tokenKey, String token, Timestamp expirationTime) {
         this.tokenKey = tokenKey;
         this.token = token;
+        this.expirationTime = expirationTime;
     }
 
     public String getTokenKey(){

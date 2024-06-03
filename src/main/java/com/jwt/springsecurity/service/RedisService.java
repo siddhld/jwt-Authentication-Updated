@@ -18,10 +18,7 @@ public class RedisService {
 
     public <T> T get(String username, Class<T> entity) {
         try {
-            System.err.println("-------  username  ------- "+ username + "------");
-            System.err.println("-------  RedisService  ------- "+entity.toString());
             String jsonValue = redisTemplate.opsForValue().get(username);
-            System.err.println("-------  RedisService  ------- " + jsonValue);
             return (jsonValue == null) ? null : mapper.readValue(jsonValue, entity);
         } catch (Exception ex) {
             System.err.println(ex);
@@ -29,8 +26,7 @@ public class RedisService {
         }
     }
 
-//    In the Below Set method the token will be removed automatically from the Redis once it Expired,
-//    Implement a logic In which it deletes from the SQL Db table also whenever in the Redis is deleted.
+//    Can you Implement a logic where a record will be deleted automatically after specific given time in MySql
 
     public void set(String username, Object o, Long expTime) {
         try {

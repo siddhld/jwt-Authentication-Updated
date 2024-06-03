@@ -7,14 +7,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+
 @Service
 public class TokenBlacklistService {
 
     @Autowired
     private RedisService redisService;
 
+    @Value("${jwt.access.token.expiry}")
+    private long jwtAccessTokenExpiryInMillisecond;
+
     @Value("${jwt.access.token.expiry.second}")
     private long jwtAccessTokenExpiryInSecond;
+
     @Autowired
     private AccessTokenRepo accessTokenRepo;
 
@@ -22,24 +28,26 @@ public class TokenBlacklistService {
     public void blacklistToken(String token) {
         System.err.println("------******** Inside blacklistToken");
         try {
-            accessTokenRepo.save(new AccessToken(token, token));
+
+            // Setting the Expiration time for access token (current time + 15 minutes in millisecond)
+            long expirationTime = System.currentTimeMillis() + jwtAccessTokenExpiryInMillisecond;
+
+            accessTokenRepo.save(new AccessToken(token, token, new Timestamp(expirationTime)));
             redisService.set("access-token-" + token, token, jwtAccessTokenExpiryInSecond);
+
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }
     }
 
     public boolean isTokenBlacklisted(String token) {
-        System.err.println("-----" + token + "-------- 1");
-        System.err.println("------******** Inside isBlacklistToken " + redisService.get("access-token-" + token, String.class));
-        System.err.println(redisService.get("access-token-" + token, String.class) == (token) ? true : false);
 
         if (redisService.get("access-token-" + token, String.class) == null) {
             AccessToken accessToken = null;
             if (accessTokenRepo.findByTokenKey(token).isPresent()) {
                 accessToken = accessTokenRepo.findByTokenKey(token).get();
             }
-            System.err.println("-----" + accessToken + "-------- 2");
+
             if (accessToken != null) {
                 redisService.set("access-token-" + token, token, jwtAccessTokenExpiryInSecond);
                 return true;
