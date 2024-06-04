@@ -16,9 +16,12 @@ public class RedisService {
     @Autowired
     private ObjectMapper mapper;
 
-    public <T> T get(String username, Class<T> entity) {
+    public <T> T get(String key, Class<T> entity) {
         try {
-            String jsonValue = redisTemplate.opsForValue().get(username);
+            String jsonValue = redisTemplate.opsForValue().get(key);
+            if (entity == String.class) {
+                return entity.cast(jsonValue);
+            }
             return (jsonValue == null) ? null : mapper.readValue(jsonValue, entity);
         } catch (Exception ex) {
             System.err.println(ex);
@@ -26,20 +29,19 @@ public class RedisService {
         }
     }
 
-//    Can you Implement a logic where a record will be deleted automatically after specific given time in MySql
-
-    public void set(String username, Object o, Long expTime) {
+    public void set(String key, Object o, Long expTime) {
         try {
             String jsonValue = mapper.writeValueAsString(o);
-            redisTemplate.opsForValue().set(username, jsonValue, expTime, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set("name", "kamal");
+            redisTemplate.opsForValue().set(key, jsonValue, expTime, TimeUnit.SECONDS);
         } catch (Exception ex) {
             System.err.println(ex);
         }
     }
 
-    public void delete(String username){
+    public void delete(String key){
         try{
-            redisTemplate.delete(username);
+            redisTemplate.delete(key);
         } catch (Exception ex) {
             System.err.println(ex);
         }

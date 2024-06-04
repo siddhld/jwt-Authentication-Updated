@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Service
 public class TokenBlacklistService {
@@ -42,16 +43,17 @@ public class TokenBlacklistService {
 
     public boolean isTokenBlacklisted(String token) {
 
-        if (redisService.get("access-token-" + token, String.class) == null) {
-            AccessToken accessToken = null;
-            if (accessTokenRepo.findByTokenKey(token).isPresent()) {
-                accessToken = accessTokenRepo.findByTokenKey(token).get();
-            }
+        System.err.println("--- Checking Redis --- "+redisService.get("name", String.class));
 
-            if (accessToken != null) {
+        if (redisService.get("access-token-" + token, String.class) == null) {
+            System.err.println("===Data is not Present in Redis===");
+            Optional<AccessToken> accessToken = accessTokenRepo.findByTokenKey(token);
+
+            if (accessToken.isPresent()) {
                 redisService.set("access-token-" + token, token, jwtAccessTokenExpiryInSecond);
                 return true;
             }
+            System.err.println("===Data is not Present in SQL===");
             return false;
         }
         return true;
