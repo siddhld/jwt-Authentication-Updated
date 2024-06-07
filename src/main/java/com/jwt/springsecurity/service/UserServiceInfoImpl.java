@@ -1,5 +1,6 @@
 package com.jwt.springsecurity.service;
 
+import com.jwt.springsecurity.exception.NotAuthorizeException;
 import com.jwt.springsecurity.model.UserInfo;
 import com.jwt.springsecurity.repository.UserInfoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class UserServiceInfoImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username){
         Optional<UserInfo> info = repo.findByUsername(username);
-        UserDetails userDetails = info.get();
+        UserDetails userDetails = info.orElse(null);
         return userDetails;
     }
 
@@ -57,7 +58,7 @@ public class UserServiceInfoImpl implements UserDetailsService {
         if (isUserAuthorized(authenticatedUserInfo, userInfo)) {
             return userInfo;
         } else {
-            return null;
+            throw new NotAuthorizeException(authenticatedUserInfo.getUsername()+" cannot access "+userInfo.getRoles().get(0)+"'s Data");
         }
     }
 

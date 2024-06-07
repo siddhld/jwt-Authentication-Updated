@@ -42,7 +42,7 @@ public class JwtService {
         UserDetails ud = new UserInfo();
 
         // If user is "Signing Up" or "Logging In" then add "user's authorities" in token.
-        Map<String, Object> claims = (userInfo.getRoles() != null && userInfo.getRoles() != "") ? setAuthorities(userInfo) : new HashMap();
+        Map<String, Object> claims = (userInfo.getRoles() != null && !userInfo.getRoles().isEmpty()) ? setAuthorities(userInfo) : new HashMap();
 
         // Constructing Token
         return Jwts.builder()

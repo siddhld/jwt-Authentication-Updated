@@ -1,5 +1,6 @@
 package com.jwt.springsecurity.controller;
 
+import com.jwt.springsecurity.exception.UserAlreadyExistException;
 import com.jwt.springsecurity.model.UserInfo;
 import com.jwt.springsecurity.service.JwtService;
 import com.jwt.springsecurity.service.TokenBlacklistService;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,9 +41,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserInfo userInfo) {Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userInfo.getUsername(), userInfo.getPassword()));
+    public String login(@RequestBody UserInfo userInfo) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userInfo.getUsername(), userInfo.getPassword()));
         if (authentication.isAuthenticated()) {
-            userInfo = (UserInfo)userService.loadUserByUsername(userInfo.getUsername());
+            userInfo = (UserInfo) userService.loadUserByUsername(userInfo.getUsername());
             String token = jwtService.generateToken(userInfo);
             String refreshToken = jwtService.generateRefreshToken(userInfo);
             tokenService.saveRefreshToken(userInfo.getUsername(), refreshToken);
@@ -53,14 +56,19 @@ public class UserController {
 
     @PostMapping("/signup")
     public String addUser(@RequestBody UserInfo userInfo) {
-        try {
+
+        UserDetails userDetails = userService.loadUserByUsername(userInfo.getUsername());
+
+        if (userDetails == null) {
             userService.addUser(userInfo);
+
             String token = jwtService.generateToken(userInfo);
             String refreshToken = jwtService.generateRefreshToken(userInfo);
+
             tokenService.saveRefreshToken(userInfo.getUsername(), refreshToken);
             return "Access Token: " + token + "\nRefresh Token: " + refreshToken;
-        } catch (Exception ex) {
-            throw new UsernameNotFoundException("Invalid user request");
+        } else {
+            throw new UserAlreadyExistException("User is already Registered");
         }
     }
 
@@ -101,19 +109,12 @@ public class UserController {
 
         if (jwtService.validateRefreshToken(refreshToken)) {
             String username = jwtService.extractUsername(refreshToken);
-            String savedRefreshToken = tokenService.getRefreshToken(username);
-
-            if (savedRefreshToken.equals(refreshToken)) {
-                UserInfo userInfo = (UserInfo) userService.loadUserByUsername(username);
-                String newAccessToken = jwtService.generateToken(userInfo);
-                return ResponseEntity.ok("Access Token: " + newAccessToken);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
-            }
+            UserInfo userInfo = (UserInfo) userService.loadUserByUsername(username);
+            String newAccessToken = jwtService.generateToken(userInfo);
+            return ResponseEntity.ok("Access Token: " + newAccessToken);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
         }
     }
-
 
 }

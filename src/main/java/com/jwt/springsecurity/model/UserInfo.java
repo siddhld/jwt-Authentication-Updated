@@ -1,9 +1,6 @@
 package com.jwt.springsecurity.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -16,9 +13,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -30,22 +27,24 @@ public class UserInfo implements UserDetails {
     private String username;
     private String email;
     private String password;
-    private String roles;
+
+//    It's commonly used when you want to store a collection of simple values (like strings or numbers)
+//    that don't have their own identity related to an entity & it stored in a separate table in the database.
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
     private String refreshToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = Arrays.stream(roles.split(","))
-//                .map(role -> new SimpleGrantedAuthority(role))
+        return roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-
-        return authorities;
     }
 
-    public String getRoles(){
+    public List<String> getRoles() {
         return roles;
     }
+
     @Override
     public String getPassword() {
         return password;

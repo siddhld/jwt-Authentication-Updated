@@ -32,16 +32,16 @@ public class RedisService {
     public void set(String key, Object o, Long expTime) {
         try {
             String jsonValue = mapper.writeValueAsString(o);
-            redisTemplate.opsForValue().set("name", "kamal");
             redisTemplate.opsForValue().set(key, jsonValue, expTime, TimeUnit.SECONDS);
         } catch (Exception ex) {
             System.err.println(ex);
         }
     }
 
-    public void delete(String key){
+
+    public void delete(String username){
         try{
-            redisTemplate.delete(key);
+            redisTemplate.delete(username);
         } catch (Exception ex) {
             System.err.println(ex);
         }
