@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
 public class UserController {
 
     @Autowired
@@ -40,7 +39,7 @@ public class UserController {
         return "Api is working fine";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public String login(@RequestBody UserInfo userInfo) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userInfo.getUsername(), userInfo.getPassword()));
         if (authentication.isAuthenticated()) {
@@ -54,7 +53,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/auth/signup")
     public String addUser(@RequestBody UserInfo userInfo) {
 
         UserDetails userDetails = userService.loadUserByUsername(userInfo.getUsername());
@@ -98,8 +97,8 @@ public class UserController {
         }
     }
 
-    @PostMapping("/refresh-token")
-    public ResponseEntity<String> refreshToken(HttpServletRequest request) {
+    @PostMapping("/generate-access-token")
+    public ResponseEntity<String> generateAccessToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid Authorization header");
